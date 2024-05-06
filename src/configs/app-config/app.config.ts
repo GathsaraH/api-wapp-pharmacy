@@ -21,4 +21,11 @@ export default registerAs("app", () => ({
   databaseMaxConnection: applicationConfig.database.maxConnection,
   databaseSslEnabled: applicationConfig.database.sslEnabled,
   databaseRejectUnauthorized: applicationConfig.database.rejectUnauthorized,
+
+  // JWT Config
+  jwtSecret: applicationConfig.jwt.jwtSecret,
+  jwtExpiresTime: applicationConfig.jwt.jwtExpiresTime,
+  refreshTokenSecret: applicationConfig.jwt.refreshTokenSecret,
+  refreshTokenSecretExpiresTime:
+    applicationConfig.jwt.refreshTokenSecretExpiresTime,
 }));

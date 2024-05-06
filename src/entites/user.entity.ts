@@ -4,10 +4,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { RoleEntity } from "./role.entity";
+import { CashierEntity } from "./cashier.entity";
+import { ManagerEntity } from "./manager.entity";
 
 @Entity({ name: "users" })
 export class UserEntity {
@@ -15,11 +18,9 @@ export class UserEntity {
   userId: string;
   @Column({ name: "user_name" })
   userName: string;
-  @Column({ name: "email" })
-  email: string;
   @Column({ name: "password" })
   password: string;
-  @Column({ name: "is_archived" ,default: false})
+  @Column({ name: "is_archived", default: false })
   isArchived: boolean;
   @CreateDateColumn({
     type: "timestamp",
@@ -37,4 +38,8 @@ export class UserEntity {
   @JoinColumn({ name: "role_id" })
   @ManyToOne(() => RoleEntity, (role) => role.users)
   roleId: RoleEntity;
+  @OneToMany(() => CashierEntity, (cashier) => cashier.userId)
+  cashier: CashierEntity[];
+  @OneToMany(() => ManagerEntity, (manager) => manager.userId)
+  manager: ManagerEntity[];
 }

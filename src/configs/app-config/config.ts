@@ -20,4 +20,10 @@ export const applicationConfig = {
     rejectUnauthorized: process.env[`DATABASE_REJECT_UNAUTHORIZED`],
     nodeTlsRejectUnauthorized: process.env[`NODE_TLS_REJECT_UNAUTHORIZED`],
   },
+  jwt: {
+    jwtSecret: process.env[`JWT_SECRET_KEY`],
+    jwtExpiresTime: process.env[`JWT_EXPIRATION_TIME`],
+    refreshTokenSecret: process.env[`JWT_REFRESH_EXPIRATION_KEY`],
+    refreshTokenSecretExpiresTime: process.env[`JWT_REFRESH_EXPIRATION_TIME`],
+  },
 };
