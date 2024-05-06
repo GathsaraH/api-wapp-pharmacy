@@ -1,11 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { CreateManagerDto } from './dto/create-manager.dto';
-import { UpdateManagerDto } from './dto/update-manager.dto';
+import { Injectable, Logger } from "@nestjs/common";
+import { CreateManagerDto } from "./dto/create-manager.dto";
+import { UpdateManagerDto } from "./dto/update-manager.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { ManagerEntity } from "src/entites/manager.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class ManagerService {
-  create(createManagerDto: CreateManagerDto) {
-    return 'This action adds a new manager';
+  private ligger: Logger = new Logger(ManagerService.name);
+  constructor(
+    @InjectRepository(ManagerEntity)
+    private readonly managerRepository: Repository<ManagerEntity>
+  ) {}
+  async createManager(createManagerDto: CreateManagerDto) {
+    return "This action adds a new manager";
   }
 
   findAll() {

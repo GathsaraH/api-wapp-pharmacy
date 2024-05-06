@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { TerminusModule } from "@nestjs/terminus";
 import { ManagerModule } from './manager/manager.module';
 import { CashierModule } from './cashier/cashier.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { CashierModule } from './cashier/cashier.module';
     AuthModule,
     TerminusModule,
     ManagerModule,
-    CashierModule
+    CashierModule,
+    EmailModule
   ],
   controllers: [AppController],
   providers: [AppService],

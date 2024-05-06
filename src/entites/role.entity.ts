@@ -1,14 +1,22 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { UserEntity } from "./user.entity";
 import { CustomerEntity } from "./customer.rntity";
+import { RoleEnum } from "src/auth/guards/role.enum";
 
 @Entity({ name: "roles" })
 export class RoleEntity {
   @PrimaryGeneratedColumn("uuid", { name: "role_id" })
   roleId: string;
-  @Column({ name: "name" })
-  name: string;
-  @Column({ name: "is_archived" ,default: false})
+  @Column({ name: "name", type: "enum", enum: RoleEnum })
+  name: RoleEnum;
+  @Column({ name: "is_archived", default: false })
   isArchived: boolean;
   @CreateDateColumn({
     type: "timestamp",
