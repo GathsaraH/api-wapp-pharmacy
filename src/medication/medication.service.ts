@@ -36,7 +36,7 @@ export class MedicationService {
     try {
       this.logger.debug(`Fetching all medications`);
       const medication = await this.medicationRepository.find();
-      if (!medication) {
+      if (!medication.length) {
         throw new HttpException("No medication found", HttpStatus.NOT_FOUND);
       }
       return medication;

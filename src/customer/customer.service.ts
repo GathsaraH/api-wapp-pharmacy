@@ -54,7 +54,7 @@ export class CustomerService {
     try {
       this.logger.debug(`Fetching all customers`);
       const customers = await this.customerRepository.find();
-      if (!customers) {
+      if (!customers.length) {
         throw new HttpException("No customers found", HttpStatus.NOT_FOUND);
       }
       return customers;
