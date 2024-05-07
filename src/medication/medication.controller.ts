@@ -12,7 +12,9 @@ import {
 import { MedicationService } from "./medication.service";
 import { CreateMedicationDto } from "./dto/create-medication.dto";
 import { UpdateMedicationDto } from "./dto/update-medication.dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { RoleEnum } from "src/auth/guards/role.enum";
+import { Roles } from "src/auth/guards/roles.decorator";
 
 @ApiTags("Medication Module")
 @Controller("medication")
@@ -21,6 +23,8 @@ export class MedicationController {
 
   @Post("create")
   @HttpCode(201)
+  @Roles(RoleEnum.Admin)
+  @ApiBearerAuth("JWT-auth")
   async createMedication(
     @Body() createMedicationDto: CreateMedicationDto
   ): Promise<void> {
@@ -35,6 +39,8 @@ export class MedicationController {
 
   @Patch("update/:medicationId")
   @HttpCode(200)
+  @Roles(RoleEnum.Admin,RoleEnum.Manager,RoleEnum.Cashier)
+  @ApiBearerAuth("JWT-auth")
   async updateMedication(
     @Param("medicationId") medicationId: string,
     @Body() updateMedicationDto: UpdateMedicationDto
@@ -47,6 +53,8 @@ export class MedicationController {
 
   @Delete("remove-soft/:medicationId")
   @HttpCode(200)
+  @Roles(RoleEnum.Admin,RoleEnum.Manager)
+  @ApiBearerAuth("JWT-auth")
   async removeSoftMedication(
     @Param("medicationId") medicationId: string
   ): Promise<void> {
@@ -55,6 +63,8 @@ export class MedicationController {
 
   @Delete("remove/:medicationId")
   @HttpCode(200)
+  @Roles(RoleEnum.Admin)
+  @ApiBearerAuth("JWT-auth")
   async removeMedication(
     @Param("medicationId") medicationId: string
   ): Promise<void> {

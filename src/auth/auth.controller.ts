@@ -1,3 +1,4 @@
+import { Public } from "./guards/public.metadata";
 import {
   Controller,
   Get,
@@ -17,7 +18,10 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post()
-  async login(@Body() createAuthDto: LoginDto):Promise<{accessToken:string}> {
+  @Public()
+  async login(
+    @Body() createAuthDto: LoginDto
+  ): Promise<{ accessToken: string }> {
     return this.authService.login(createAuthDto);
   }
 }
