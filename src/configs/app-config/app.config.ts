@@ -28,4 +28,12 @@ export default registerAs("app", () => ({
   refreshTokenSecret: applicationConfig.jwt.refreshTokenSecret,
   refreshTokenSecretExpiresTime:
     applicationConfig.jwt.refreshTokenSecretExpiresTime,
+  // Email Config
+  emailHost: applicationConfig.email.emailHost,
+  emailPort: applicationConfig.email.emailPort,
+  emailSecure: applicationConfig.email.emailSecure,
+  emailUser: applicationConfig.email.emailUser,
+  emailPassword: applicationConfig.email.emailPassword,
+  emailSecureConnection: applicationConfig.email.emailSecureConnection,
+  emailRejectUnAuthorized: applicationConfig.email.emailRejectUnAuthorized,
 }));

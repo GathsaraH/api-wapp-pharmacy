@@ -26,4 +26,14 @@ export const applicationConfig = {
     refreshTokenSecret: process.env[`JWT_REFRESH_EXPIRATION_KEY`],
     refreshTokenSecretExpiresTime: process.env[`JWT_REFRESH_EXPIRATION_TIME`],
   },
+  email: {
+    emailHost: process.env[`EMAIL_HOST`],
+    emailPort: process.env[`EMAIL_PORT`],
+    emailSecure: process.env[`EMAIL_SECURE`],
+    emailUser: process.env[`EMAIL_USER`],
+    emailPassword: process.env[`EMAIL_PASSWORD`],
+    emailSecureConnection: process.env[`EMAIL_SECURE_CONNECTION`],
+    emailRejectUnAuthorized: process.env[`EMAIL_REJECT_UN_AUTHORIZED`],
+    adminEmail: process.env[`ADMIN_EMAIL`],
+  },
 };

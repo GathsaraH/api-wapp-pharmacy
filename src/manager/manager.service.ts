@@ -47,7 +47,7 @@ export class ManagerService {
           dto.name,
           dto.userName,
           password,
-          role
+          role.name
         );
       });
     } catch (error) {
@@ -132,7 +132,7 @@ export class ManagerService {
     try {
       this.logger.debug(`Getting all managers`);
       const managers = await this.managerRepository.find();
-      if (!managers) {
+      if (!managers.length) {
         throw new HttpException("No managers found", HttpStatus.NOT_FOUND);
       }
       return managers;
@@ -179,7 +179,9 @@ export class ManagerService {
       this.logger.debug(`Removing manager with soft id: ${managerId}`);
       await this.managerRepository.update({ managerId }, { isArchived: true });
     } catch (error) {
-      this.logger.error(`Error removing manager (soft): ${JSON.stringify(error)}`);
+      this.logger.error(
+        `Error removing manager (soft): ${JSON.stringify(error)}`
+      );
       throw new HttpException(
         error.message,
         error.status ?? HttpStatus.INTERNAL_SERVER_ERROR
@@ -190,7 +192,27 @@ export class ManagerService {
   async removeManager(managerId: string) {
     try {
       this.logger.debug(`Removing manager with id: ${managerId}`);
-      await this.managerRepository.delete({ managerId });
+
+      await this.entityManager.transaction(
+        async (transactionalEntityManager) => {
+          const manager = await transactionalEntityManager
+            .getRepository(ManagerEntity)
+            .findOne({
+              where: { managerId },
+              relations: ["userId"],
+            });
+          if (!manager) {
+            throw new HttpException("Manager not found", HttpStatus.NOT_FOUND);
+          }
+
+          await transactionalEntityManager
+            .getRepository(ManagerEntity)
+            .delete({ managerId });
+          await transactionalEntityManager
+            .getRepository(UserEntity)
+            .delete({ userId: String(manager.userId.userId) });
+        }
+      );
     } catch (error) {
       this.logger.error(`Error removing manager: ${JSON.stringify(error)}`);
       throw new HttpException(
