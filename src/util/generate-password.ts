@@ -1,4 +1,4 @@
-export function generateTempPassword(): string {
+export function generatePassword(): string {
   const length = 10;
   const charset =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

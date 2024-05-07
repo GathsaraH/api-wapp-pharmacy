@@ -14,7 +14,8 @@ export class EmailService {
     email: string,
     name: string,
     userName: string,
-    password: string
+    password: string,
+    role
   ): Promise<void> {
     try {
       this.logger.debug(`Send Registration Email: ${email}`);
@@ -29,6 +30,7 @@ export class EmailService {
           email,
           userName,
           noSpace: true,
+          role,
         },
       });
     } catch (error) {
