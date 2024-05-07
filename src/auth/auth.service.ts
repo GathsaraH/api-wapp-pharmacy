@@ -1,26 +1,60 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from "@nestjs/common";
 
+import { InjectRepository } from "@nestjs/typeorm";
+import { UserEntity } from "src/entites/user.entity";
+import { Repository } from "typeorm";
+import { LoginDto } from "./dto/login";
+import * as bcrypt from "bcrypt";
+import { JwtService } from "@nestjs/jwt";
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
-
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  private logger: Logger = new Logger(AuthService.name);
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    private readonly jwtService: JwtService,
+  ) {}
+  async login(dto: LoginDto):Promise<{accessToken:string}> {
+    try {
+      this.logger.debug(`Authenticating user with email: ${dto.userName}`);
+      const user = await this.userRepository
+        .createQueryBuilder("user")
+        .leftJoinAndSelect("user.roleId", "roleId")
+        .where("user.userName = :userName", { userName: dto.userName })
+        .getOne();
+      if (!user) {
+        throw new NotFoundException("User not found");
+      }
+      const isPasswordMatching = await bcrypt.compare(
+        dto.password,
+        user.password
+      );
+      if (!isPasswordMatching) {
+        throw new HttpException(
+          "Wrong credentials provided",
+          HttpStatus.BAD_REQUEST
+        );
+      }
+      const userAccessToken = {
+        id: user.userId,
+        userName: user.userName,
+        roles: user.roleId.name,
+      };
+      return {
+        accessToken: await this.jwtService.signAsync(userAccessToken),
+      }
+    } catch (error) {
+      this.logger.error(`Error authenticating user: ${JSON.stringify(error)}`);
+      throw new HttpException(
+        error.message,
+        error.status ?? HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 }
