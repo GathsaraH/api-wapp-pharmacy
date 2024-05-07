@@ -37,6 +37,7 @@ export class AuthGuard implements CanActivate {
       );
     }
     const request = context.switchToHttp().getRequest();
+    
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
@@ -48,6 +49,7 @@ export class AuthGuard implements CanActivate {
       const userRole = requiredRoles.some((role) =>
         payload.roles?.includes(role)
       );
+      
       if (!userRole)
         throw new UnauthorizedException("You do not have permission (Roles)");
       request["user"] = payload;

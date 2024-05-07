@@ -116,9 +116,10 @@ export class CustomerService {
       );
     }
   }
-  async removeCustomer(customerId: string): Promise<void> {
+  async removeCustomer(customerId: string, token: string): Promise<void> {
     try {
       this.logger.debug(`Removing customer with id: ${customerId}`);
+      this.logger.debug(`Get detail from token`);
       const customer = await this.customerRepository.findOne({
         where: { customerId },
       });

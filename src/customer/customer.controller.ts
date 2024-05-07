@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   HttpCode,
+  Req,
 } from "@nestjs/common";
 import { CustomerService } from "./customer.service";
 import { CreateCustomerDto } from "./dto/create-customer.dto";
@@ -57,11 +58,16 @@ export class CustomerController {
   ): Promise<void> {
     await this.customerService.removeSoftCustomer(customerId);
   }
+
   @Delete("remove/:customerId")
   @HttpCode(200)
   @Roles(RoleEnum.Admin)
   @ApiBearerAuth("JWT-auth")
-  async removeCustomer(@Param("customerId") customerId: string): Promise<void> {
-    await this.customerService.removeCustomer(customerId);
+  async removeCustomer(
+    @Req() req: Request,
+    @Param("customerId") customerId: string
+  ): Promise<void> {
+    const token = req['headers']['authorization'].split(' ')[1];    
+    await this.customerService.removeCustomer(customerId,token);
   }
 }
