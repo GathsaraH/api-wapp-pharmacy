@@ -17,9 +17,9 @@ export class CustomerEntity {
   name: string;
   @Column({ name: "email" })
   phoneNumber: string;
-  @Column({ name: "age" })
+  @Column({ name: "age", type: "decimal" })
   age: number;
-  @Column({ name: "weight" })
+  @Column({ name: "weight", type: "decimal" })
   height: number;
   @Column({ name: "is_archived", default: false })
   isArchived: boolean;
