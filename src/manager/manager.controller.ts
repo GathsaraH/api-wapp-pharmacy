@@ -13,6 +13,8 @@ import { CreateManagerDto } from "./dto/create-manager.dto";
 import { UpdateManagerDto } from "./dto/update-manager.dto";
 import { ApiTags } from "@nestjs/swagger";
 import { ManagerEntity } from "src/entites/manager.entity";
+import { RoleEnum } from "src/auth/guards/role.enum";
+import { Roles } from "src/auth/guards/roles.decorator";
 
 @Controller("manager")
 @ApiTags("Manager Module")
@@ -21,6 +23,7 @@ export class ManagerController {
 
   @Post("create")
   @HttpCode(201)
+  @Roles(RoleEnum.Admin)
   async createManager(
     @Body() createManagerDto: CreateManagerDto
   ): Promise<void> {
@@ -28,6 +31,7 @@ export class ManagerController {
   }
 
   @Get("all")
+  @Roles(RoleEnum.Admin)
   @HttpCode(200)
   async findAllManagers(): Promise<ManagerEntity[]> {
     return this.managerService.findAllManagers();
@@ -35,6 +39,7 @@ export class ManagerController {
 
   @Patch("update/:managerId")
   @HttpCode(200)
+  @Roles(RoleEnum.Admin)
   async updateManager(
     @Param("managerId") managerId: string,
     @Body() updateManagerDto: UpdateManagerDto
@@ -44,6 +49,7 @@ export class ManagerController {
 
   @Delete("remove-soft/:managerId")
   @HttpCode(200)
+  @Roles(RoleEnum.Admin)
   async removeSoftManager(
     @Param("managerId") managerId: string
   ): Promise<void> {

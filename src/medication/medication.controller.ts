@@ -33,6 +33,7 @@ export class MedicationController {
 
   @Get("all")
   @HttpCode(200)
+  @Roles(RoleEnum.Admin,RoleEnum.Manager,RoleEnum.Cashier)
   async findAllMedication(): Promise<MedicationEntity[]> {
     return this.medicationService.findAllMedication();
   }
