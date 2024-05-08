@@ -11,7 +11,7 @@ import {
 import { CashierService } from "./cashier.service";
 import { CreateCashierDto } from "./dto/create-cashier.dto";
 import { UpdateCashierDto } from "./dto/update-cashier.dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { CashierEntity } from "src/entites/cashier.entity";
 import { Roles } from "src/auth/guards/roles.decorator";
 import { RoleEnum } from "src/auth/guards/role.enum";
@@ -24,6 +24,7 @@ export class CashierController {
   @Post("create")
   @HttpCode(201)
   @Roles(RoleEnum.Admin)
+  @ApiBearerAuth("JWT-auth")
   async createCashier(
     @Body() createCashierDto: CreateCashierDto
   ): Promise<void> {
@@ -33,12 +34,14 @@ export class CashierController {
   @Get("all")
   @Roles(RoleEnum.Admin)
   @HttpCode(200)
+  @ApiBearerAuth("JWT-auth")
   async findAllCashier(): Promise<CashierEntity[]> {
     return this.cashierService.findAllCashier();
   }
   @Patch("update/:cashierId")
   @HttpCode(200)
   @Roles(RoleEnum.Admin)
+  @ApiBearerAuth("JWT-auth")
   async updateCashier(
     @Param("cashierId") cashierId: string,
     @Body() updateCashierDto: UpdateCashierDto
@@ -49,6 +52,7 @@ export class CashierController {
   @Delete("remove/:cashierId")
   @HttpCode(200)
   @Roles(RoleEnum.Admin)
+  @ApiBearerAuth("JWT-auth")
   async removeCashier(@Param("cashierId") cashierId: string): Promise<void> {
     await this.cashierService.removeCashier(cashierId);
   }

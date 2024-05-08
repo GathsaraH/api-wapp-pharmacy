@@ -11,7 +11,7 @@ import {
 import { ManagerService } from "./manager.service";
 import { CreateManagerDto } from "./dto/create-manager.dto";
 import { UpdateManagerDto } from "./dto/update-manager.dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { ManagerEntity } from "src/entites/manager.entity";
 import { RoleEnum } from "src/auth/guards/role.enum";
 import { Roles } from "src/auth/guards/roles.decorator";
@@ -24,6 +24,7 @@ export class ManagerController {
   @Post("create")
   @HttpCode(201)
   @Roles(RoleEnum.Admin)
+  @ApiBearerAuth("JWT-auth")
   async createManager(
     @Body() createManagerDto: CreateManagerDto
   ): Promise<void> {
@@ -33,6 +34,7 @@ export class ManagerController {
   @Get("all")
   @Roles(RoleEnum.Admin)
   @HttpCode(200)
+  @ApiBearerAuth("JWT-auth")
   async findAllManagers(): Promise<ManagerEntity[]> {
     return this.managerService.findAllManagers();
   }
@@ -40,6 +42,7 @@ export class ManagerController {
   @Patch("update/:managerId")
   @HttpCode(200)
   @Roles(RoleEnum.Admin)
+  @ApiBearerAuth("JWT-auth")
   async updateManager(
     @Param("managerId") managerId: string,
     @Body() updateManagerDto: UpdateManagerDto
@@ -50,6 +53,7 @@ export class ManagerController {
   @Delete("remove-soft/:managerId")
   @HttpCode(200)
   @Roles(RoleEnum.Admin)
+  @ApiBearerAuth("JWT-auth")
   async removeSoftManager(
     @Param("managerId") managerId: string
   ): Promise<void> {
@@ -58,6 +62,8 @@ export class ManagerController {
 
   @Delete("remove/:managerId")
   @HttpCode(200)
+  @Roles(RoleEnum.Admin)
+  @ApiBearerAuth("JWT-auth")
   async removeManager(@Param("managerId") managerId: string): Promise<void> {
     await this.managerService.removeManager(managerId);
   }
