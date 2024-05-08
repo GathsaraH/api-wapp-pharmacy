@@ -34,6 +34,7 @@ export class CustomerController {
 
   @Get("all")
   @ApiBearerAuth("JWT-auth")
+  @Roles(RoleEnum.Admin, RoleEnum.Manager, RoleEnum.Cashier)
   async findAllCustomers(): Promise<CustomerEntity[]> {
     return this.customerService.findAllCustomers();
   }
